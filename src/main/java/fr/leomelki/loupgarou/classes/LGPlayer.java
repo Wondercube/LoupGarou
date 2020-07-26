@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -36,10 +36,10 @@ import fr.leomelki.loupgarou.utils.VariableCache;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_15_R1.DimensionManager;
-import net.minecraft.server.v1_15_R1.EnumGamemode;
-import net.minecraft.server.v1_15_R1.PacketPlayOutRespawn;
-import net.minecraft.server.v1_15_R1.WorldType;
+import net.minecraft.server.v1_16_R1.DimensionManager;
+import net.minecraft.server.v1_16_R1.EnumGamemode;
+import net.minecraft.server.v1_16_R1.PacketPlayOutRespawn;
+import net.minecraft.server.v1_16_R1.World;
 
 public class LGPlayer {
 	private static HashMap<Player, LGPlayer> cachedPlayers = new HashMap<Player, LGPlayer>();
@@ -245,7 +245,7 @@ public class LGPlayer {
 			infos.setData(Arrays.asList(new PlayerInfoData(gameProfile, 10, NativeGameMode.SURVIVAL, WrappedChatComponent.fromText(getPlayer().getName()))));
 			infos.sendPacket(getPlayer());
 			//Pour qu'il voit son skin changer (sa main et en f5), on lui dit qu'il respawn (alors qu'il n'est pas mort mais ça marche quand même mdr)
-			PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(DimensionManager.OVERWORLD, 0, WorldType.NORMAL, EnumGamemode.ADVENTURE);
+			PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(DimensionManager.OVERWORLD, World.OVERWORLD, 0,  EnumGamemode.ADVENTURE, EnumGamemode.ADVENTURE, false, false, false);
 			((CraftPlayer)getPlayer()).getHandle().playerConnection.sendPacket(respawn);
 			//Enfin, on le téléporte à sa potion actuelle car sinon il se verra dans le vide
 			getPlayer().teleport(getPlayer().getLocation());

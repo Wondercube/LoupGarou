@@ -81,11 +81,20 @@ public class WrapperPlayServerEntityEquipment extends AbstractPacket {
 	}
 
 	public ItemSlot getSlot() {
-		return handle.getItemSlots().read(0);
+		try {
+			return handle.getItemSlots().read(0);
+		} catch (Exception e) {
+			System.out.println("Need an update from PacketWrapper.");
+			return null;
+		}
 	}
 
 	public void setSlot(ItemSlot value) {
-		handle.getItemSlots().write(0, value);
+		try {
+			handle.getItemSlots().write(0, value);
+		} catch (Exception e) {
+			System.out.println("Need an update from PacketWrapper.");
+		}
 	}
 
 	/**

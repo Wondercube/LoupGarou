@@ -12,8 +12,8 @@ import java.util.StringJoiner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -34,13 +34,13 @@ import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
 import fr.leomelki.loupgarou.events.LGVoteLeaderChange;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
-import net.minecraft.server.v1_15_R1.DataWatcher;
-import net.minecraft.server.v1_15_R1.DataWatcherObject;
-import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_15_R1.Entity;
-import net.minecraft.server.v1_15_R1.EntityArmorStand;
-import net.minecraft.server.v1_15_R1.IChatBaseComponent;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_16_R1.DataWatcher;
+import net.minecraft.server.v1_16_R1.DataWatcherObject;
+import net.minecraft.server.v1_16_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_16_R1.Entity;
+import net.minecraft.server.v1_16_R1.EntityArmorStand;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.PacketPlayOutEntityMetadata;
 
 public class LGVote {
 	@Getter LGPlayer choosen;
@@ -91,21 +91,23 @@ public class LGVote {
 		for(LGPlayer player : participants)
 			player.choose(getChooseCallback(player));
 	}
-    private static DataWatcherObject<Optional<IChatBaseComponent>> az;
-    private static DataWatcherObject<Boolean> aA;
-    private static DataWatcherObject<Byte> T;
+	private static DataWatcherObject<Byte> T; //index 0
+    private static DataWatcherObject<Optional<IChatBaseComponent>> ax; //index 2
+    private static DataWatcherObject<Boolean> ay; //index 3
     private static final EntityArmorStand eas = new EntityArmorStand(((CraftWorld)Bukkit.getWorlds().get(0)).getHandle(), 0, 0, 0);
     static {
     	try {
-    		Field f = Entity.class.getDeclaredField("az");
-    		f.setAccessible(true);
-	    	az = (DataWatcherObject<Optional<IChatBaseComponent>>) f.get(null);
-	    	f = Entity.class.getDeclaredField("aA");
-    		f.setAccessible(true);
-	    	aA = (DataWatcherObject<Boolean>) f.get(null);
-	    	f = Entity.class.getDeclaredField("T");
+    		Field f = Entity.class.getDeclaredField("T");
     		f.setAccessible(true);
 	    	T = (DataWatcherObject<Byte>) f.get(null);
+
+    		f = Entity.class.getDeclaredField("ax");
+    		f.setAccessible(true);
+	    	ax = (DataWatcherObject<Optional<IChatBaseComponent>>) f.get(null);
+
+	    	f = Entity.class.getDeclaredField("ay");
+    		f.setAccessible(true);
+	    	ay = (DataWatcherObject<Boolean>) f.get(null);
     	}catch(Exception err) {
     		err.printStackTrace();
     	}
@@ -334,9 +336,9 @@ public class LGVote {
 			meta.setMetadata(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0x20), new WrappedWatchableObject(noGravity, true), new WrappedWatchableObject(customNameVisible, true), new WrappedWatchableObject(customName, IChatBaseComponent.ChatSerializer.b("§6§l"+votesNbr+"§e vote"+(votesNbr > 1 ? "s" : "")))));
 			*/
 			DataWatcher datawatcher = new DataWatcher(eas);
-			datawatcher.register(T, (byte)0x20);
-	        datawatcher.register(az, Optional.ofNullable(IChatBaseComponent.ChatSerializer.a("{\"text\":\"§6§l"+votesNbr+"§e vote"+(votesNbr > 1 ? "s" : "")+"\"}")));
-	        datawatcher.register(aA, true);
+			datawatcher.register(T, (byte)0x20); //Invisible
+	        datawatcher.register(ax, Optional.ofNullable(IChatBaseComponent.ChatSerializer.a("{\"text\":\"§6§l"+votesNbr+"§e vote"+(votesNbr > 1 ? "s" : "")+"\"}")));
+	        datawatcher.register(ay, true);
 			PacketPlayOutEntityMetadata meta = new PacketPlayOutEntityMetadata(entityId, datawatcher, true);
 			
 			for(LGPlayer lgp : viewers) {
@@ -381,7 +383,7 @@ public class LGVote {
 							 noGravity = new WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)),
 							 customNameVisible = new WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)),
 							 customName = new WrappedDataWatcherObject(2, WrappedDataWatcher.Registry.get(IChatBaseComponent.class)),
-							 item = new WrappedDataWatcherObject(7, WrappedDataWatcher.Registry.get(net.minecraft.server.v1_15_R1.ItemStack.class));
+							 item = new WrappedDataWatcherObject(7, WrappedDataWatcher.Registry.get(net.minecraft.server.v1_16_R1.ItemStack.class));
 	private void showVoting(LGPlayer to, LGPlayer ofWho) {
 		int entityId = -to.getPlayer().getEntityId();
 		WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
