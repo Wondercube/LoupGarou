@@ -109,9 +109,10 @@ public class LGGame implements Listener{
 		for(LGPlayer lgp : inGame)
 			chat.sendPacket(lgp.getPlayer());
 	}
-	public void broadcastMessage(String msg) {
-		for(LGPlayer lgp : inGame)
-			lgp.sendMessage(msg);
+	public void broadcastMessage(String msg) {//TODO replace by Bukkit broadcast
+		/*for(LGPlayer lgp : inGame)
+			lgp.sendMessage(msg);*/
+		Bukkit.broadcastMessage(msg);
 	}
 	public void broadcastSpacer() {
 		for(LGPlayer lgp : inGame)
@@ -644,7 +645,7 @@ public class LGGame implements Listener{
 				team.setMode(1);
 				team.setName("you_are");
 				team.sendPacket(lgp.getPlayer());
-				LGPlayer.thePlayer(lgp.getPlayer()).join(MainLg.getInstance().getCurrentGame());
+				//LGPlayer.thePlayer(lgp.getPlayer()).join(MainLg.getInstance().getCurrentGame());
 			}
 		//A remettre pour activer le démarrage automatique
 	/*	wait(30, ()->{
